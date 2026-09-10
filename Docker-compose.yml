@@ -1,0 +1,37 @@
+services:
+
+   bestbags:
+
+      build: .
+      ports:
+       - 3000:3000
+      environment:
+      - MONGO_URI=mongodb://${MONGO_USER}:${MONGO_PASS}@mongo-db:27017/${MONGO_DB_NAME}?authSource=admin
+      networks:
+        - bestbags
+
+   mongo_Db:
+
+     image: mongo:latest  
+
+     ports:
+      - 27017:27017      
+
+     environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${mongo_pass}
+
+     volumes:
+        - bestbags:/data/db
+     networks:
+      - bestbags    
+
+volumes:
+  bestbags:
+
+networks:
+ bestbags:
+   driver: bridge
+
+       
+  
