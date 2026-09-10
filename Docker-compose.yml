@@ -7,7 +7,7 @@ services:
        - 3000:3000
       environment:
       - MONGO_URI=mongodb://${MONGO_USER}:${MONGO_PASS}@mongo_Db:27017/${MONGO_DB_NAME}?authSource=admin
-      - SESSION_SECRET=your_secret_key_change_this_in_production
+      - SESSION_SECRET=${SESSION_SECRET}
       networks:
         - bestbags
       depends_on:
