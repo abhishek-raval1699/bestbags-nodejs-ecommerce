@@ -6,5 +6,7 @@ COPY . .
 
 RUN npm install --legacy-peer-deps
 
+COPY docker-entrypoint.sh .
+RUN chmod +x ./docker-entrypoint.sh
 
-CMD [ "npm","start" ]
+ENTRYPOINT ["./docker-entrypoint.sh"]
