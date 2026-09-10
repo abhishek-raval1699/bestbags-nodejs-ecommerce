@@ -1,0 +1,224 @@
+Dockerization and Deployment Steps
+Step 1: Create a Dockerfile
+
+First, I created a simple Dockerfile for the Node.js application.
+
+The initial Dockerfile was created to install the required dependencies and run the application inside a Docker container.
+
+Step 2: Build the Docker Image
+
+After creating the Dockerfile, I ran the following command to check whether the image could be built successfully:
+
+docker build -t bestbags-app .
+
+This was used to verify that the Dockerfile and application dependencies were configured correctly.
+
+Step 3: Add the Build Command
+
+Initially, I added the following instruction to the Dockerfile:
+
+RUN npm run build
+
+However, the Docker build failed with an error.
+
+I investigated the error and checked the package.json file. Under the scripts section, there was no build script available.
+
+For example, the project did not contain:
+
+"scripts": {
+    "build": "..."
+}
+
+Therefore, npm run build could not be executed.
+
+Step 4: Remove the Build Step
+
+Since the application did not have a build script, I removed:
+
+RUN npm run build
+
+from the Dockerfile.
+
+I then built the image again:
+
+docker build -t bestbags-app .
+
+This time, the Docker image was built successfully.
+
+Step 5: Create the Docker Compose File
+
+After successfully building the application image, I created a docker-compose.yml file.
+
+The Docker Compose configuration included:
+
+The Node.js application
+MongoDB
+Port configuration
+Docker network
+Persistent volume for MongoDB
+Environment variables
+
+For MongoDB, I used the latest MongoDB image:
+
+image: mongo:latest
+
+The MongoDB service was configured to use port:
+
+27017
+
+The application was configured to use port:
+
+3000
+
+Both containers were placed on the same Docker network so that the application could communicate with MongoDB.
+
+Step 6: Remove the Existing Image and Start Docker Compose
+
+I removed the existing application image and started the services using:
+
+docker compose up
+
+The containers started, but the application returned an error.
+
+Step 7: Configure the Backend URI
+
+The error occurred because the application did not have the required URI/configuration to communicate with the backend.
+
+I investigated the error and identified that the required URI needed to be provided through the application's environment configuration.
+
+Step 8: Add Environment Variables
+
+I added the required .env file and configured the required values, including:
+
+MongoDB username
+MongoDB password
+Database name
+Backend/application URI
+Other required environment variables
+
+I also added the required Docker Compose dependency configuration so that the application service depends on the MongoDB service.
+
+For example:
+
+depends_on:
+  - mongodb
+
+I then ran:
+
+docker compose up
+Step 9: Container Starts Successfully
+
+After adding the required environment variables and dependency configuration, the containers started successfully.
+
+I then accessed the application through:
+
+http://localhost:3000
+
+However, another error was displayed.
+
+Step 10: Investigate the Secret Error
+
+The application returned an error indicating that a secret was required.
+
+I investigated the error and found that the application expected a secret value to be provided.
+
+The secret could be a custom value, but it needed to be provided as a string.
+
+Step 11: Add the Secret
+
+I added the required secret to the .env file.
+
+For example:
+
+SECRET=my-secret-value
+
+Then I passed the value to the application through the Docker Compose environment configuration.
+
+Example:
+
+environment:
+  SECRET: ${SECRET}
+
+This allows Docker Compose to read the value from the .env file and provide it to the application container.
+
+Step 12: Run Docker Compose Again
+
+After adding the secret, I started the application again:
+
+docker compose up
+
+The containers started successfully.
+
+When I accessed:
+
+http://localhost:3000
+
+the application produced another error.
+
+Step 13: Investigate the Category Error
+
+The new error indicated that categories such as:
+
+Category [0] not found
+Category [1] not found
+Category [2] not found
+
+were missing.
+
+I investigated the application and identified that the MongoDB database was empty.
+
+The application expected initial product/category data to already exist in the database, but the MongoDB container had started with an empty database.
+
+The project contains a seedDB script that can be used to populate the database with the required initial data.
+
+Step 14: Create a Docker Entrypoint Script
+
+To automatically initialize the database when the container starts, I created:
+
+docker-entrypoint.sh
+
+The entrypoint script is responsible for running the database seed operation before starting the application.
+
+I then updated the Dockerfile to:
+
+Copy docker-entrypoint.sh into the container.
+Give the script execute permission.
+Configure the script as the container's entrypoint.
+
+For example:
+
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+The entrypoint script can then perform the required database initialization and start the Node.js application.
+
+Step 15: Rebuild and Start the Containers
+
+Because the Dockerfile was modified, the existing image needed to be rebuilt.
+
+I used:
+
+docker compose up --build
+
+The --build option forces Docker Compose to rebuild the application image using the updated Dockerfile before starting the containers.
+
+At this stage, the complete flow is:
+
+User
+  |
+  | http://localhost:3000
+  v
+Frontend / Node.js Application
+  |
+  | MongoDB connection
+  v
+MongoDB :27017
+  |
+  | Database initialization
+  v
+Seed Data
+
+The application now has the required configuration, secret, database connection, and initial database data required for the application to run correctly.
