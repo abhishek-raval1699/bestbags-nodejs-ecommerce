@@ -23,9 +23,8 @@ jobs:
 
             - name: Create ESLint config
               run: |
-                    cat > eslint.config.js <<'EOF'const js = require("@eslint/js");
-                    module.exports = [js.configs.recommended];
-                    EOF
+                    echo 'const js = require("@eslint/js");' > eslint.config.js
+                    echo 'module.exports = [js.configs.recommended];' >> eslint.config.js
 
             - name: run 
               run: npx eslint .    
