@@ -19,6 +19,22 @@ jobs:
 
             - name: Install ESLint
               run: npm install --no-save eslint@8 eslint-config-standard@17
+            - name: Create ESLint config
+              run: |
+                  cat > .eslintrc.json <<'EOF'
+                  {
+                    "env": {
+                      "node": true,
+                      "es2021": true,
+                      "browser": true
+                    },
+                    "parserOptions": {
+                      "ecmaVersion": 2021,
+                      "sourceType": "script"
+                    },
+                    "rules": {}
+                  }
+                  EOF     
 
             - name: Run ESLint
               run: npx eslint . --env node
