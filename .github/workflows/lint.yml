@@ -23,18 +23,29 @@ jobs:
 
             - name: Create ESLint config
               run: |
-                    echo 'const js = require("@eslint/js");' > eslint.config.js
-                    echo 'module.exports = [' >> eslint.config.js
-                    echo '  {' >> eslint.config.js
-                    echo '    files: ["**/*.js"],' >> eslint.config.js
-                    echo '    languageOptions: {' >> eslint.config.js
-                    echo '      ecmaVersion: "latest",' >> eslint.config.js
-                    echo '      sourceType: "commonjs",' >> eslint.config.js
-                    echo '      globals: globals.node' >> eslint.config.js
-                    echo '    },' >> eslint.config.js
-                    echo '    rules: js.configs.recommended.rules' >> eslint.config.js
-                    echo '  }' >> eslint.config.js
-                    echo '];' >> eslint.config.js
+                     echo 'const js = require("@eslint/js");' > eslint.config.js
+                     echo 'module.exports = [' >> eslint.config.js
+                     echo '  {' >> eslint.config.js
+                     echo '    files: ["**/*.js"],' >> eslint.config.js
+                     echo '    languageOptions: {' >> eslint.config.js
+                     echo '      ecmaVersion: "latest",' >> eslint.config.js
+                     echo '      sourceType: "commonjs",' >> eslint.config.js
+                     echo '      globals: {' >> eslint.config.js
+                     echo '        require: "readonly",' >> eslint.config.js
+                     echo '        module: "readonly",' >> eslint.config.js
+                     echo '        __dirname: "readonly",' >> eslint.config.js
+                     echo '        __filename: "readonly",' >> eslint.config.js
+                     echo '        process: "readonly",' >> eslint.config.js
+                     echo '        console: "readonly",' >> eslint.config.js
+                     echo '        Buffer: "readonly",' >> eslint.config.js
+                     echo '        setTimeout: "readonly",' >> eslint.config.js
+                     echo '        clearTimeout: "readonly"' >> eslint.config.js
+                     echo '      }' >> eslint.config.js
+                     echo '    },' >> eslint.config.js
+                     echo '    rules: js.configs.recommended.rules' >> eslint.config.js
+                     echo '  }' >> eslint.config.js
+                     echo '];' >> eslint.config.js
+                     
             - name: Run ESLint
               run: npx eslint .    
             
