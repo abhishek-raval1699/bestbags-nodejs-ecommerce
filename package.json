@@ -5,8 +5,10 @@
   "description": "A virtual ecommerce website using Node js, Express js, and Mongoose.",
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "nodemon app.js",
+    "lint": "eslint ."
   },
+ 
   "author": "Maryam Aljanabi",
   "license": "MIT",
   "dependencies": {
