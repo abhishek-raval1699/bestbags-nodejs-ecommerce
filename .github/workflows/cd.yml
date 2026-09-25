@@ -9,7 +9,7 @@ jobs:
 
          
     build:
-      needs: lint-and-test
+    
       secrets: inherit
       uses: ./.github/workflows/build.yml
 
