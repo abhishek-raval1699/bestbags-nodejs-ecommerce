@@ -1,0 +1,12 @@
+name: deploy
+on:
+  push:
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: code
+        uses: actions/checkout@v7
+
+      - name: deploy
+        run: docker compose up -d --build
