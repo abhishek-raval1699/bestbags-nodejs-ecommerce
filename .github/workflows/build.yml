@@ -1,10 +1,10 @@
 name: build
 on: 
-    push:
+    workflow_call:
    
 jobs:
     build:
-        runs-on: ubuntu-letest
+        runs-on: ubuntu-latest
         steps:
             - name: code
               uses: actions/checkout@v7

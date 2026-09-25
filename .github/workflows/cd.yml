@@ -1,0 +1,20 @@
+name: ci/cd
+
+on: 
+    push:
+
+jobs:
+    lint-and-test:
+       uses: ./.github/workflows/lint.yml
+
+         
+    build:
+      needs: lint-and-test
+      secrets: inherit
+      uses: ./.github/workflows/build.yml
+
+    deploy: 
+      needs: build  
+      secrets: inherit
+      uses: ./.github/workflows/deploy.yml
+

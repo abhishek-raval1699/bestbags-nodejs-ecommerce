@@ -1,6 +1,6 @@
 name: deploy
 on:
-  push:
+  workflow_call:
 jobs:
   deploy:
     runs-on: self-hosted
